@@ -5,7 +5,7 @@ Author: GSS
 Mail: gao.hillhill@gmail.com
 Description: 
 Created Time: 7/15/2016 11:47:39 AM
-Last modified: 6/24/2023 4:44:34 PM
+Last modified: 6/27/2023 12:45:54 AM
 """
 
 #defaut setting for scientific caculation
@@ -136,7 +136,7 @@ for fi in range(len(tindexs)):
     
     if posno <= 9: #side fembs for U plane
         for ch in range(128): 
-            uch = int(side_femb[ch][1]) + posno*128
+            uch = int(side_femb[ch][1]) + (posno-1)*128
             tmp = copy.deepcopy(femb)
             tmp.append(crateno)
             tmp.append(wibno)
@@ -155,6 +155,7 @@ for fi in range(len(tindexs)):
             tmp.append(ch)
             tmp.append("V")
             tmp.append(vch)
+            print (tmp)
 
             dec_chn.append(tmp)
     else: #top femb
@@ -167,20 +168,23 @@ for fi in range(len(tindexs)):
             tmp.append(ch)
             if "U" in chstr:
                 tmp.append("U")
-                tmp.append(int(chstr[1:])+128*9)
+                tmp.append(int(chstr[1:])+128*9+(posno-10)*32)
             elif "V" in chstr:
                 tmp.append("V")
                 tmp.append(int(chstr[1:])+(posno-10)*32)
-                dec_chn.append(tmp)
             else: #Y plane
                 tmp.append("Y")
                 tmp.append(int(chstr[1:])+(posno-10)*64)
             dec_chn.append(tmp)
 
 top_row = "APA,Crate,FEMB_SN,POSITION,WIB_CONNECTION,Crate_No,WIB_no,WIB_FEMB_LOC,FEMB_CH,Wire_type,Wire_No,"
+print (len(dec_chn))
 
 fn_map = "./SBND_mapping.csv"
 with open (fn_map, 'w') as fp:
     fp.write( top_row + "\n")
     for x in dec_chn:
         fp.write(",".join(str(i) for i in x) +  "," + "\n")
+
+
+
